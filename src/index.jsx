@@ -1,4 +1,3 @@
-// src/index.jsx
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import MainView from './components/MainView/MainView';
