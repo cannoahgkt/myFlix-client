@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import MainView from './components/MainView/MainView';
 import MovieView from './components/MovieView/MovieView';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.scss";
 
 const MyFlixApplication = () => {
   const [currentView, setCurrentView] = useState('main');
