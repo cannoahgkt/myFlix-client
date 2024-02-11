@@ -1,35 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import MovieCard from '../MovieCard/MovieCard';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { BookCard } from "../book-card/book-card";
+import { BookView } from "../book-view/book-view";
+import { LoginView } from "../login-view/login-view";
 
-const MainView = ({ handleCardClick }) => {
-  const [movies, setMovies] = useState([]);
+export const MainView = () => {
+  const [books, setBooks] = useState([]);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch movies from the API when the component mounts
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get('http://your-api-url/movies');
-        setMovies(response.data.movies);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
-    };
+    fetch("https://openlibrary.org/search.json?q=star+wars")
+      .then((response) => response.json())
+      .then((data) => {
+        const booksFromApi = data.docs.map((doc) => {
+          return {
+            id: doc.key,
+            title: doc.title,
+            image: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
+            author: doc.author_name?.[0]
+          };
+        });
 
-    fetchMovies();
+        setBooks(booksFromApi);
+      });
   }, []);
 
+  if (!user) {
+    return <LoginView />;
+  }
+
+  if (selectedBook) {
+    return (
+      <BookView book={selectedBook} onBackClick={() => setSelectedBook(null)} />
+    );
+  }
+
+  if (books.length === 0) {
+    return <div>The list is empty!</div>;
+  }
+
   return (
-    <div className="main-view">
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie._id} // Assuming each movie has a unique ID
-          title={movie.title}
-          onClick={() => handleCardClick(movie)}
+    <div>
+      {books.map((book) => (
+        <BookCard
+          key={book.id}
+          book={book}
+          onBookClick={(newSelectedBook) => {
+            setSelectedBook(newSelectedBook);
+          }}
         />
       ))}
     </div>
   );
 };
 
-export default MainView;
+if (!user) {
+  return <LoginView onLoggedIn={(user) => setUser(user)} />;
+}
