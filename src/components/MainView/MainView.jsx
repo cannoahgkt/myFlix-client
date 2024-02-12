@@ -44,7 +44,7 @@ export const MainView = () => {
             <LoginView onLoggedIn={handleLogin} />
           ) : (
             <>
-              <LogoutButton onLogout={handleLogout} /> {/* logout button render */}
+              <LogoutButton onLogout={handleLogout} /> {/* Logout button render */}
               {selectedBook ? (
                 <BookView
                   book={selectedBook}
