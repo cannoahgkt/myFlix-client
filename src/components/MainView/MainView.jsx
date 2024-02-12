@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from 'react-bootstrap';
 import { BookCard } from "../book-card/book-card";
 import { BookView } from "../book-view/book-view";
 import { LoginView } from "../login-view/login-view";
-import { LogoutButton } from "../logout-button/logout-button"; // Import the logout button component
+import { LogoutButton } from "../logout-button/logout-button";
 
 export const MainView = () => {
   const [books, setBooks] = useState([]);
@@ -31,40 +32,41 @@ export const MainView = () => {
   };
 
   const handleLogout = () => {
-    // Clear user session (e.g., remove token from localStorage)
     localStorage.removeItem("token");
     setUser(null);
   };
 
-  if (!user) {
-    return <LoginView onLoggedIn={handleLogin} />;
-  }
-
-  if (selectedBook) {
-    return (
-      <div>
-        <LogoutButton onLogout={handleLogout} /> {/* Render the logout button */}
-        <BookView book={selectedBook} onBackClick={() => setSelectedBook(null)} />
-      </div>
-    );
-  }
-
-  if (books.length === 0) {
-    return <div>The list is empty!</div>;
-  }
-
   return (
-    <div>
-      <LogoutButton onLogout={handleLogout} /> {/* Render the logout button */}
-      {books.map((book) => (
-        <BookCard
-          key={book.id}
-          book={book}
-          onBookClick={(newSelectedBook) => {
-            setSelectedBook(newSelectedBook);
-          }}
-        />
-      ))}
-    </div>
+    <Container> {/* content */}
+      <Row>
+        <Col>
+          {!user ? (
+            <LoginView onLoggedIn={handleLogin} />
+          ) : (
+            <>
+              <LogoutButton onLogout={handleLogout} /> {/* logout button render */}
+              {selectedBook ? (
+                <BookView
+                  book={selectedBook}
+                  onBackClick={() => setSelectedBook(null)}
+                />
+              ) : books.length === 0 ? (
+                <div>The list is empty!</div>
+              ) : (
+                books.map((book) => (
+                  <BookCard
+                    key={book.id}
+                    book={book}
+                    onBookClick={(newSelectedBook) => {
+                      setSelectedBook(newSelectedBook);
+                    }}
+                  />
+                ))
+              )}
+            </>
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 };
