@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { BookCard } from "../book-card/book-card";
 import { BookView } from "../book-view/book-view";
 import { LoginView } from "../login-view/login-view";
-import { LogoutButton } from "../logout-button/logout-button";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
   const [books, setBooks] = useState([]);
@@ -37,36 +37,77 @@ export const MainView = () => {
   };
 
   return (
-    <Container> {/* content */}
-      <Row>
-        <Col>
-          {!user ? (
-            <LoginView onLoggedIn={handleLogin} />
-          ) : (
-            <>
-              <LogoutButton onLogout={handleLogout} /> {/* Logout button render */}
-              {selectedBook ? (
-                <BookView
-                  book={selectedBook}
-                  onBackClick={() => setSelectedBook(null)}
-                />
-              ) : books.length === 0 ? (
-                <div>The list is empty!</div>
-              ) : (
-                books.map((book) => (
-                  <BookCard
-                    key={book.id}
-                    book={book}
-                    onBookClick={(newSelectedBook) => {
-                      setSelectedBook(newSelectedBook);
-                    }}
-                  />
-                ))
-              )}
-            </>
-          )}
-        </Col>
+    <BrowserRouter>
+      <Row className="justify-content-md-center">
+        <Routes>
+          <Route
+            path="/signup"
+            element={
+              <>
+                {user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <SignupView />
+                  </Col>
+                )}
+              </>
+
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <>
+                {user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <LoginView onLoggedIn={(user) => setUser(user)} />
+                  </Col>
+                )}
+              </>
+
+            }
+          />
+          <Route
+            path="/books/:bookId"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : books.length === 0 ? (
+                  <Col>The list is empty!</Col>
+                ) : (
+                  <Col md={8}>
+                    <BookView books={books} />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : books.length === 0 ? (
+                  <Col>The list is empty!</Col>
+                ) : (
+                  <>
+                    {books.map((book) => (
+                      <Col className="mb-4" key={book.id} md={3}>
+                        <BookCard book={book} />
+                      </Col>
+                    ))}
+                  </>
+                )}
+              </>
+            }
+          />
+        </Routes>
       </Row>
-    </Container>
+    </BrowserRouter>
   );
 };
