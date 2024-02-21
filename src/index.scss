@@ -1,5 +1,14 @@
-$color: steelblue;
+$primary: Black;
+$body-bg: CadetBlue;
+$card-bg: lightblue;
 
-.my-flix {
-  color: $color;
-}
+.main-content {
+  margin-top: 5rem;
+}  
+
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+.form-control {
+    background-color: lightcyan;
+  }

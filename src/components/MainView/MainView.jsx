@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { BookCard } from "../book-card/book-card";
-import { BookView } from "../book-view/book-view";
+import { Link, BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { MovieCard } from "../MovieCard/MovieCard";
+import { MovieView } from "../MovieView/MovieView";
 import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
+import { SignupView } from "../SignupView/signup-view";
 
 export const MainView = () => {
-  const [books, setBooks] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("https://openlibrary.org/search.json?q=star+wars")
+    fetch("https://mymovies-8b73c95d0ae4.herokuapp.com/movies")
       .then((response) => response.json())
       .then((data) => {
-        const booksFromApi = data.docs.map((doc) => {
-          return {
-            id: doc.key,
-            title: doc.title,
-            image: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
-            author: doc.author_name?.[0]
-          };
-        });
-
-        setBooks(booksFromApi);
+        setMovies(data);
       });
   }, []);
 
@@ -38,81 +28,83 @@ export const MainView = () => {
     setUser(null);
   };
 
-  const handleBookSelect = (book) => {
-    setSelectedBook(book);
+  const handleMovieSelect = (movie) => {
+    setSelectedMovie(movie);
   };
 
   return (
     <Container>
       <Row className="justify-content-md-center">
-        <Routes>
-          <Route
-            path="/signup"
-            element={
-              <>
-                {user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col md={5}>
-                    <SignupView />
-                  </Col>
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <>
-                {user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col md={5}>
-                    <LoginView onLoggedIn={(user) => setUser(user)} />
-                  </Col>
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/books/:bookId"
-            element={
-              <>
-                {!user ? (
-                  <Navigate to="/login" replace />
-                ) : books.length === 0 ? (
-                  <Col>The list is empty!</Col>
-                ) : (
-                  <Col md={8}>
-                    <BookView book={selectedBook} />
-                  </Col>
-                )}
-              </>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <>
-                {!user ? (
-                  <Navigate to="/login" replace />
-                ) : books.length === 0 ? (
-                  <Col>The list is empty!</Col>
-                ) : (
-                  <>
-                    {books.map((book) => (
-                      <Col className="mb-4" key={book.id} md={3}>
-                        <Link to={`/books/${book.id}`} onClick={() => handleBookSelect(book)}>
-                          <BookCard book={book} />
-                        </Link>
-                      </Col>
-                    ))}
-                  </>
-                )}
-              </>
-            }
-          />
-        </Routes>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/signup"
+              element={
+                <>
+                  {user ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Col md={5}>
+                      <SignupView />
+                    </Col>
+                  )}
+                </>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <>
+                  {user ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Col md={5}>
+                      <LoginView onLoggedIn={(user) => setUser(user)} />
+                    </Col>
+                  )}
+                </>
+              }
+            />
+            <Route
+              path="/movies/:movieId"
+              element={
+                <>
+                  {!user ? (
+                    <Navigate to="/login" replace />
+                  ) : movies.length === 0 ? (
+                    <Col>The list is empty!</Col>
+                  ) : (
+                    <Col md={8}>
+                      <MovieView movie={selectedMovie} />
+                    </Col>
+                  )}
+                </>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <>
+                  {!user ? (
+                    <Navigate to="/login" replace />
+                  ) : movies.length === 0 ? (
+                    <Col>The list is empty!</Col>
+                  ) : (
+                    <>
+                      {movies.map((movie) => (
+                        <Col className="mb-4" key={movie._id} md={3}>
+                          <Link to={`/movies/${movie._id}`} onClick={() => handleMovieSelect(movie)}>
+                            <MovieCard movie={movie} />
+                          </Link>
+                        </Col>
+                      ))}
+                    </>
+                  )}
+                </>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </Row>
     </Container>
   );
