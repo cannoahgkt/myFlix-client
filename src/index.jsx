@@ -4,6 +4,14 @@ import MainView from './components/MainView/MainView';
 import MovieView from './components/MovieView/MovieView';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
+import { BrowserRouter } from 'react-router-dom';
+
+ReactDOM.render(
+  <BrowserRouter>
+    <MyFlixApplication />
+  </BrowserRouter>,
+  document.getElementById('root')
+);
 
 const MyFlixApplication = () => {
   const [currentView, setCurrentView] = useState('main');
