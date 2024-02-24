@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import "./profile-view.scss";
 
 export const ProfileView = ({ user }) => {
   // State to manage form input fields
