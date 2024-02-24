@@ -1,6 +1,10 @@
 .navbar {
     background-color: #ffffff; 
     border-bottom: 1px solid #dee2e6; 
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
   }
   
   .navbar-brand {
@@ -16,4 +20,3 @@
       }
     }
   }
-  

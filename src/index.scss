@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
 $primary: Black;
 $body-bg: CadetBlue;
 $card-bg: lightblue;
@@ -6,9 +8,8 @@ $card-bg: lightblue;
   margin-top: 5rem;
 }  
 
-
-@import "~bootstrap/scss/bootstrap.scss";
-
-.form-control {
+.custom-form-controls {
+  .form-control {
     background-color: lightcyan;
   }
+}
