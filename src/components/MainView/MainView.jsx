@@ -6,7 +6,7 @@ import { MovieView } from "../MovieView/MovieView";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../SignupView/signup-view";
 
-export const MainView = () => {
+const MainView = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(null);
@@ -16,6 +16,9 @@ export const MainView = () => {
       .then((response) => response.json())
       .then((data) => {
         setMovies(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
       });
   }, []);
 
@@ -40,67 +43,35 @@ export const MainView = () => {
             <Route
               path="/signup"
               element={
-                <>
-                  {user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                      <SignupView />
-                    </Col>
-                  )}
-                </>
+                user ? <Navigate to="/" /> : <Col md={5}><SignupView /></Col>
               }
             />
             <Route
               path="/login"
               element={
-                <>
-                  {user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                      <LoginView onLoggedIn={(user) => setUser(user)} />
-                    </Col>
-                  )}
-                </>
+                user ? <Navigate to="/" /> : <Col md={5}><LoginView onLoggedIn={handleLogin} /></Col>
               }
             />
             <Route
               path="/movies/:movieId"
               element={
-                <>
-                  {!user ? (
-                    <Navigate to="/login" replace />
-                  ) : movies.length === 0 ? (
-                    <Col>The list is empty!</Col>
-                  ) : (
-                    <Col md={8}>
-                      <MovieView movie={selectedMovie} />
-                    </Col>
-                  )}
-                </>
+                !user ? <Navigate to="/login" replace /> :
+                movies.length === 0 ? <Col>The list is empty!</Col> :
+                <Col md={8}><MovieView movie={selectedMovie} /></Col>
               }
             />
             <Route
               path="/"
               element={
-                <>
-                  {!user ? (
-                    <Navigate to="/login" replace />
-                  ) : movies.length === 0 ? (
-                    <Col>The list is empty!</Col>
-                  ) : (
-                    <>
-                      {movies.map((movie) => (
-                        <Col className="mb-4" key={movie._id} md={3}>
-                          <Link to={`/movies/${movie._id}`} onClick={() => handleMovieSelect(movie)}>
-                            <MovieCard movie={movie} />
-                          </Link>
-                        </Col>
-                      ))}
-                    </>
-                  )}
-                </>
+                !user ? <Navigate to="/login" replace /> :
+                movies.length === 0 ? <Col>The list is empty!</Col> :
+                movies.map((movie) => (
+                  <Col className="mb-4" key={movie._id} md={3}>
+                    <Link to={`/movies/${movie._id}`} onClick={() => handleMovieSelect(movie)}>
+                      <MovieCard movie={movie} />
+                    </Link>
+                  </Col>
+                ))
               }
             />
           </Routes>
@@ -109,3 +80,5 @@ export const MainView = () => {
     </Container>
   );
 };
+
+export default MainView;

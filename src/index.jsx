@@ -1,19 +1,20 @@
-import { createRoot } from "react-dom/client";
-
-import { MainView } from './components/MainView/MainView';
-
-import "./index.scss";
-import Container from "react-bootstrap/Container";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import  MainView  from './components/MainView/MainView';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
 
 const MyFlixApplication = () => {
   return (
-    <Container className="main-content">
+    <div className="main-content">
       <MainView />
-    </Container>
+    </div>
   );
 };
 
-const container = document.querySelector("#root");
-const root = createRoot(container);
-
-root.render(<MyFlixApplication />);
+ReactDOM.render(
+  <React.StrictMode>
+    <MyFlixApplication />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
