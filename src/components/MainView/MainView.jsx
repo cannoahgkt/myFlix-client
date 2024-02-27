@@ -12,7 +12,7 @@ const MainView = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("https://myflixonline-61d240776399.herokuapp.com/")
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/")
       .then((response) => response.json())
       .then((data) => {
         setMovies(data);
