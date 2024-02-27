@@ -5,6 +5,7 @@ import { MovieCard } from "../MovieCard/MovieCard";
 import { MovieView } from "../MovieView/MovieView";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../SignupView/signup-view";
+import { NavigationBar } from "../nav-bar/navigation-bar";
 
 const MainView = () => {
   const [movies, setMovies] = useState([]);
@@ -36,9 +37,10 @@ const MainView = () => {
   };
 
   return (
-    <Container>
-      <Row className="justify-content-md-center">
-        <BrowserRouter>
+    <BrowserRouter>
+      <NavigationBar user={user} onLoggedOut={handleLogout} />
+      <Container>
+        <Row className="justify-content-md-center">
           <Routes>
             <Route
               path="/signup"
@@ -75,9 +77,9 @@ const MainView = () => {
               }
             />
           </Routes>
-        </BrowserRouter>
-      </Row>
-    </Container>
+        </Row>
+      </Container>
+    </BrowserRouter>
   );
 };
 
