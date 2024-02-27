@@ -1,22 +1,29 @@
 .navbar {
-    background-color: #ffffff; 
-    border-bottom: 1px solid #dee2e6; 
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-  }
-  
-  .navbar-brand {
-    font-weight: bold; 
-    color: #000000; 
-  }
-  
-  .navbar-nav {
-    .nav-link {
-      color: #000000; 
-      &.active {
-        font-weight: bold; 
-      }
-    }
-  }
+  background-color: #e9eef6;
+  border-bottom: 1px solid #dee2e6;
+  position: fixed;
+  top: 10px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Using important
+.navbar-brand {
+  font-weight: bold;
+  font-size: 30px !important;
+  color: rgb(95, 120, 160) !important;
+}
+
+.navbar-nav .nav-link {
+  font-size: 20px;
+  color: #000000;
+}
+
+
+.navbar-nav .nav-link:hover::after {
+  opacity: 5;
+}

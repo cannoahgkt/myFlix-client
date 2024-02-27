@@ -1,11 +1,65 @@
-$primary: Black;
-$body-bg: CadetBlue;
+$body-bg: rgb(95, 120, 160);
 $card-bg: lightblue;
-
-
 
 @import "~bootstrap/scss/bootstrap.scss";
 
 .form-control {
     background-color: rgb(240, 240, 240);
   }
+
+
+  .col-md-5 {
+    width: 100%;
+}
+
+.form-container {
+  max-width: 400px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #323232;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #323232;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #414141;
+}
+
+//Using important
+.submit-button:active {
+  background-color: black !important;
+}
