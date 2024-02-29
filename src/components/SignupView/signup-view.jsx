@@ -3,65 +3,72 @@ import { Form, Button, Container } from "react-bootstrap";
 import "./signup-view.scss";
 
 export const SignupView = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    email: "",
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = {
+      username: username,
+      password: password,
+      email: email
+    };
+
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/users", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((response) => {
+      if (response.ok) {
+        alert("Signup successful");
+        window.location.href = "/login";
+      } else {
+        alert("Signup failed");
+      }
+    })
+    .catch(error => {
+      console.error("Error signing up:", error);
+      alert("Something went wrong");
     });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data:", formData);
   };
 
   return (
     <Container>
-      <Form className="form-container" onSubmit={handleSubmit}>
-        <Form.Group controlId="formUsername" className="form-group">
-          <Form.Label className="form-label">Username:</Form.Label>
+      <Form className="signupForm" onSubmit={handleSubmit}>
+        <Form.Group controlId="formUsername">
+          <Form.Label>Username:</Form.Label>
           <Form.Control
             type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="form-control"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
+            minLength="3"
           />
         </Form.Group>
-
-        <Form.Group controlId="formEmail" className="form-group">
-          <Form.Label className="form-label">Email:</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="form-control"
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formPassword" className="form-group">
-          <Form.Label className="form-label">Password:</Form.Label>
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password:</Form.Label>
           <Form.Control
             type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </Form.Group>
-
-        <Button type="submit" variant="primary" className="submit-button">
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email:</Form.Label>
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" className="submit-button">
           Sign Up
         </Button>
       </Form>
