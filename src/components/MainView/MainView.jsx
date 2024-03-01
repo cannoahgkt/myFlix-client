@@ -7,10 +7,11 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../SignupView/signup-view";
 import { NavigationBar } from "../nav-bar/navigation-bar";
 
-const MainView = () => {
-  const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [user, setUser] = useState(null);
+  const MainView = () => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const [movies, setMovies] = useState([]);
+    const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/")

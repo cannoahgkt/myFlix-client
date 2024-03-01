@@ -8,29 +8,35 @@ export const LoginView = ({ onLoggedIn }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Submits login data to the server
-    fetch("YOUR_API_URL/login", {
+  
+    const data = {
+      username: username,
+      password: password,
+    };
+  
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ Username: username, Password: password })
+      body: JSON.stringify(data)
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.user) {
-          // Calls onLoggedIn callback with user and token
-          onLoggedIn(data.user, data.token);
-        } else {
-          alert("No such user");
-        }
-      })
-      .catch((error) => {
-        console.error("Error logging in:", error);
-        alert("Something went wrong");
-      });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem("token", data.token);
+      onLoggedIn(data.user);
+    })
+    .catch((error) => {
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
+    });
   };
+  
 
   return (
     <div className="form-container">
