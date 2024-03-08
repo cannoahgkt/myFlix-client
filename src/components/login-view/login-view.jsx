@@ -11,7 +11,7 @@ export const LoginView = ({ onLoggedIn }) => {
   
     const data = {
       username: username,
-      password: password,
+      password: password
     };
   
     fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/login", {
@@ -28,8 +28,9 @@ export const LoginView = ({ onLoggedIn }) => {
       return response.json();
     })
     .then((data) => {
+      localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
-      onLoggedIn(data.user);
+      onLoggedIn(data.user, data.token);
     })
     .catch((error) => {
       console.error("Login error:", error);
