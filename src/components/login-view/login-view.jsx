@@ -21,20 +21,19 @@ export const LoginView = ({ onLoggedIn }) => {
       },
       body: JSON.stringify(data)
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
-      onLoggedIn(data.user);
+      console.log("Login response: ", data);
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+        onLoggedIn(data.user, data.token);
+      } else {
+        alert("No such user");
+      }
     })
-    .catch((error) => {
-      console.error("Login error:", error);
-      alert("Login failed. Please check your credentials.");
+    .catch((e) => {
+      alert("Something went wrong");
     });
   };
   

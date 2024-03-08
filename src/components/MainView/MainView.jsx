@@ -8,14 +8,13 @@ import { SignupView } from "../SignupView/signup-view";
 import { NavigationBar } from "../nav-bar/navigation-bar";
 
 const MainView = () => {
-  const storedUserJSON = localStorage.getItem('user');
-  const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null;
+  const storedUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/")
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -27,12 +26,10 @@ const MainView = () => {
           setMovies(data);
         } else {
           console.error("Empty response received from the server");
-          setError("Empty response received from the server"); // Set error state
         }
       })
       .catch((error) => {
         console.error("Error fetching movies:", error);
-        setError("Error fetching movies: " + error.message); // Set error state
       });
   }, []);
 
@@ -47,8 +44,8 @@ const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
+          setToken(null);
           localStorage.clear();
-          // Remove setToken(null) if token state is not defined in your component
         }}
       />
       <Container>
@@ -79,7 +76,7 @@ const MainView = () => {
                       <LoginView
                         onLoggedIn={(user, token) => {
                           setUser(user);
-                          // setToken(token); // Add token state if necessary
+                          setToken(token);
                         }}
                       />
                     </Col>
@@ -98,7 +95,7 @@ const MainView = () => {
                       <p>The list is empty. Loading data from API...</p>
                     </Col>
                   ) : (
-                    <MovieView movies={movies} user={user} />
+                    <MovieView movies={movies} user={user} token={token} />
                   )}
                 </>
               }
@@ -126,11 +123,6 @@ const MainView = () => {
               }
             />
           </Routes>
-          {error && (
-            <Col style={{ color: "red", textAlign: "center" }}>
-              <p>{error}</p>
-            </Col>
-          )}
         </Row>
       </Container>
     </BrowserRouter>
