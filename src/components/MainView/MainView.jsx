@@ -14,7 +14,7 @@ const MainView = () => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/login")
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
