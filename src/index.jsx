@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import  MainView  from './components/MainView/MainView';
+import { createRoot } from 'react-dom/client';
+import MainView from './components/MainView/MainView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
 
@@ -12,9 +12,9 @@ const MyFlixApplication = () => {
   );
 };
 
-ReactDOM.render(
+// Use createRoot instead of ReactDOM.render
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <MyFlixApplication />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

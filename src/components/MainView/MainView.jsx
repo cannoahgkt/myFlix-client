@@ -11,10 +11,10 @@ const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [token, setToken] = useState(null); // Add token state
 
   useEffect(() => {
-    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com")
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/movies") // Use your link for fetching movies
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -36,17 +36,15 @@ const MainView = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setToken(null);
+    localStorage.clear();
   };
 
   return (
     <BrowserRouter>
       <NavigationBar
         user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
+        onLoggedOut={handleLogout} // Pass the handleLogout function
       />
       <Container>
         <Row className="justify-content-center">
