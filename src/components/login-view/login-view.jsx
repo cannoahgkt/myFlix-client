@@ -8,12 +8,12 @@ export const LoginView = ({ onLoggedIn }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+    
     const data = {
       username: username,
       password: password
     };
-  
+    
     fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/login", {
       method: "POST",
       headers: {
@@ -26,6 +26,8 @@ export const LoginView = ({ onLoggedIn }) => {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
+        console.log("User stored in localStorage:", data.user);
+        console.log("Token stored in localStorage:", data.token);
         onLoggedIn(data.user, data.token);
       } else {
         alert("No such user");
@@ -33,6 +35,7 @@ export const LoginView = ({ onLoggedIn }) => {
     })
     .catch((error) => {
       alert("Login failed. Please try again.");
+      console.error("Error during login:", error);
     });
   };
   
