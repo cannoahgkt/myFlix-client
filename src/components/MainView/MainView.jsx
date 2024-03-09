@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
+import { MovieCard } from "../MovieCard/MovieCard";
+import { MovieView } from "../MovieView/MovieView";
 import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { SignupView } from "../SignupView/signup-view";
+import { NavigationBar } from "../nav-bar/navigation-bar";
 
 const MainView = () => {
   const storedUser = localStorage.getItem("user");
