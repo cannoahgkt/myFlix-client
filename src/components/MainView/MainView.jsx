@@ -9,54 +9,42 @@ import { NavigationBar } from "../nav-bar/navigation-bar";
 
 const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
-  const storedToken = localStorage.getItem('token');
   const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
-  const [moviesFromAPI, setMovies] = useState([]);
-
-  const updateUser = user => {
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
-  }
+  const [movies, setMovies] = useState([]);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    if (!token) return;
-
-    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/movies", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(response => response.json())
-    .then(movies => {
-      const moviesFromAPI = movies.map(movie => {
-        return {
-          id: movie._id,
-          title: movie.title,
-          description: movie.description,
-          genre: movie.genre.name,
-          director: movie.director.name,
-          image: movie.imageurl
-        };
+    fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          setMovies(data);
+        } else {
+          console.error("Empty response received from the server");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
       });
-      setMovies(moviesFromAPI);
-    });
-  }, [token]);
+  }, []);
 
-  useEffect(() => {
-    setViewMovies(movies);
-  }, [movies]);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+  };
 
   return (
     <BrowserRouter>
       <NavigationBar
         user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-        onSearch={(query) => {
-          setViewMovies(movies.filter(movie => movie.title.toLowerCase().includes(query.toLowerCase())));
-        }}
+        onLoggedOut={handleLogout}
       />
       <Container>
         <Row className="justify-content-center">
@@ -95,29 +83,17 @@ const MainView = () => {
               }
             />
             <Route
-              path="/profile"
-              element={
-                !user ? (
-                  <Navigate to="/login" replace />
-                ) : (
-                  <ProfileView user={user} token={token} movies={movies} onLoggedOut={() => {
-                    setUser(null);
-                    setToken(null);
-                    localStorage.clear();
-                  }} updateUser={updateUser}/>
-                )
-              }
-            />
-            <Route
               path="/movies/:movieId"
               element={
                 <>
                   {!user ? (
                     <Navigate to="/login" replace />
-                  ) : movies.length === 0 ? ( 
-                    <Col style={{color: "white"}}><p>The list is empty. Loading data from api...</p></Col>
+                  ) : movies.length === 0 ? (
+                    <Col style={{ color: "white" }}>
+                      <p>The list is empty. Loading data from API...</p>
+                    </Col>
                   ) : (
-                    <MovieView movies={movies} user={user} token={token} updateUser={updateUser}/>
+                    <MovieView movies={movies} user={user} token={token} />
                   )}
                 </>
               }
@@ -128,11 +104,13 @@ const MainView = () => {
                 <>
                   {!user ? (
                     <Navigate to="/login" replace />
-                  ) : movies.length === 0 ? ( 
-                    <Col style={{color: "white"}}><p>The list is empty. Loading data from api...</p></Col>
+                  ) : movies.length === 0 ? (
+                    <Col style={{ color: "white" }}>
+                      <p>The list is empty. Loading data from API...</p>
+                    </Col>
                   ) : (
                     <>
-                      {viewMovies.map(movie => (
+                      {movies.map((movie) => (
                         <Col className="mb-4" key={movie.id} xl={2} lg={3} md={4} xs={6}>
                           <MovieCard movie={movie} />
                         </Col>
