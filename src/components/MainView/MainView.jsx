@@ -6,6 +6,7 @@ import { MovieView } from "../MovieView/MovieView";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../SignupView/signup-view";
 import { NavigationBar } from "../nav-bar/navigation-bar";
+import { ProfileView } from "../ProfileView/ProfileView";
 
 const MainView = () => {
   const storedUser = localStorage.getItem("user");
@@ -23,7 +24,7 @@ const MainView = () => {
   useEffect(() => {
       if (!token) return;
 
-      fetch("https://cfmovies-ffc8e49a7be5.herokuapp.com/movies", {
+      fetch("https://movies-service-330159435834.herokuapp.com/movies", {
           headers: { Authorization: `Bearer ${token}` }
       })
       .then(resonse => resonse.json())
